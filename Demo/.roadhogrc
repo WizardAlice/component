@@ -1,0 +1,25 @@
+{
+  "entry": "src/index.js",
+  "disableCSSModules": true,
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr",
+        "transform-runtime",
+        ["import", { "libraryName": "antd"}]
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+        "transform-runtime"
+      ]
+    }
+  },
+  "proxy": {
+    "/engineer": {
+      "target": "http://localhost:3000/",
+      "secure" : false,
+      "changeOrigin": true
+    }
+  }
+}
