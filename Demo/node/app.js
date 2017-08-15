@@ -4,6 +4,8 @@ const bodyParser = require('body-parser') //中间件
 const multer = require('multer')
 
 const table = require('./mock/table')
+const chart = require('./mock/chart')
+
 
 let app = express()
 
@@ -24,6 +26,9 @@ app.get('/table',(req,res)=>{//获取最新的新闻
   res.json(table)
 })
 
+app.get('/chart',(req,res)=>{//获取最新的新闻
+  res.json(chart)
+})
 
 
 
