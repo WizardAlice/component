@@ -1,4 +1,9 @@
 
+html, body, #root {
+  height: 100%;
+}
+
+
 .normal {
   font-family: Georgia, sans-serif;
   margin-top: 3em;
@@ -9,23 +14,6 @@
   font-size: 2.5rem;
   font-weight: normal;
   letter-spacing: -1px;
-}
-
-.welcome {
-  height: 328px;
-  background: url(../assets/yay.jpg) no-repeat center 0;
-  background-size: 388px 328px;
-}
-
-.list {
-  font-size: 1.2em;
-  margin-top: 1.8em;
-  list-style: none;
-  line-height: 1.5em;
-}
-
-.list code {
-  background: #f7f7f7;
 }
 
 .form {
@@ -48,4 +36,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.rangePicker {
+  width: 25%;
+}
+.formsLabel{
+  display: inline-block;
+  width: 30%;
+  text-align: center;
+}
+.radioSwitch{
+  margin-left: 3%;
+}
+.ant-select-selection--multiple{
+  height:28px!important;
+}
+.ant-select-selection__rendered{
+  bottom: 10px;
+}
+.selectReact{
+  width: 25%;
+  display: flex;
+}
+.ant-spin-dot{
+  position: fixed!important;
+  top: 50%;
+  left: 52%!important;
+}
+.ant-spin-text{
+  position: fixed!important;
+  top: 50%;
 }

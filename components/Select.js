@@ -7,10 +7,11 @@ export default class Selects extends Component {
   render(){
     let attributes = this.props.attributes
     return (
-      <div style={{ width: "200" }}>
+      <div className="selectReact">
+        <span className="formsLabel">{this.props.name}:</span>
         {
-          Array.isArray(this.props.attributes.data.pop())?
-            <Select showSearch style={{ width: "80%" }} defaultValue={attributes.default} optionFilterProp="children" onChange={this.handleChange} filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+          Array.isArray(this.props.attributes.data[this.props.attributes.data.length-1])?
+            <Select showSearch onChange={this.props.tagchange} style={{ width: "80%" }} defaultValue={attributes.default} optionFilterProp="children" >
               {
                 attributes.data.map((vv, i) => {
                   return (<OptGroup label={vv[0]} key={i}>
@@ -23,7 +24,7 @@ export default class Selects extends Component {
                 })
               }
             </Select>:
-            <Select showSearch style={{ width: "80%" }} defaultValue={attributes.default} optionFilterProp="children" onChange={this.handleChange} filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+            <Select showSearch onChange={(v)=>this.props.tagchange(v, this.props.name)} value={this.props.tagValue} tags={true} multiple={false} style={{ width: "70%" }} defaultValue={attributes.default} optionFilterProp="children" >
               {
                 attributes.data.map((vv, i) => {
                   return <Option value={vv} key={i}>{vv}</Option>
