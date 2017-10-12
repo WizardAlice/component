@@ -1,3 +1,5 @@
+import { getUrl, objectToString, oneDate } from './getUrl' 
+
 export function gettable(){
   return fetch("http://localhost:8000/chart",{
     method: "GET",
@@ -18,8 +20,12 @@ export function gettable(){
   })
 }
 
+// let url_head = "http://localhost:3000"
+let url_head = ""
+
 export function getForm(){
-  return fetch("/seed/prop_reports/form_part",{
+  let str = getUrl(window.location.href)
+  return fetch(url_head+str,{
     credentials : "include",
     mode: "cors",
     // headers: {
@@ -30,36 +36,34 @@ export function getForm(){
       return res.json()
     }).then((data)=>{
       return {
-        forms: data.form.form_items
+        forms: data.form.form_items,
+        action: data.form.action
       }
     })
 }
 
-export function getChart({from_date, end_date, tag}){
-  let linux_v = tag.linux_v
-  let apil = tag.apil
-  let ro_pd_brand = tag.brand
-  let ro_pd_model = tag.model
-  let ro_pd_cpu_abi = tag.abi
-  let ro_yunos_sdk_version = tag.yunos_version
-  let str = "/seed/prop_reports/index.json?"+"seed_prop_report[from_date]="+from_date+"&seed_prop_report[end_date]="+end_date+"&seed_prop_report[tag]="+tag.tag+"&seed_prop_report[linux_v]="+linux_v+"&seed_prop_report[apil]="+apil+"&seed_prop_report[ro_pd_brand]="+ro_pd_brand+"&seed_prop_report[ro_pd_model]="+ro_pd_model+"&seed_prop_report[ro_pd_cpu_abi]="+ro_pd_cpu_abi+"&seed_prop_report[ro_yunos_sdk_version]="+ro_yunos_sdk_version
+//我这默认黑箱的情况下可怎么改名啊！！！
+export function getChart({from_date = "", end_date = "", tag, action, report_date = ""}){
+  let select = objectToString(tag)
+  report_date = oneDate(report_date)
+  let str = url_head+action+".json?"+"report[from_date]="+from_date+"&report[end_date]="+end_date+report_date+select
   return fetch(str,{
   // return fetch("http://localhost:8888/suibian",{
     credentials : "include",
     mode: "cors",
     method: "GET",
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    // headers: {
+    //   'Content-Type': 'application/x-www-form-urlencoded'
+    // }
   }).then((res) => {
     return res.json()
   }).then((data) => {
     return {
       chart: data.chart,
       ratio_chart: data.ratio_chart,
-      body: data.table.body,
-      columns: data.table.columns,
-      id: data.table.id
+      body: data.body,
+      columns: data.columns,
+      table: data.table
     }
   })
 }

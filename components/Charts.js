@@ -10,13 +10,18 @@ echarts.registerTheme('my_theme', {
     padding: 200
   }
 })
+
+
 export default class Allbook extends Component{
   constructor(props, context){
     super(props, context)
     this.state = {
       option: {
         tooltip : {
-          trigger: 'axis'
+          trigger: 'axis',
+          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+              type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
         },
         legend: {
           data: this.props.data[0].legend.map((v)=> v.toString()),
@@ -37,7 +42,7 @@ export default class Allbook extends Component{
         xAxis : [
           {
             type : 'category',
-            boundaryGap : false,
+            boundaryGap : this.props.data[1].boundaryGap,
             data : this.props.data[1].data
           }
         ],
@@ -46,7 +51,7 @@ export default class Allbook extends Component{
             type : this.props.data[2].yAxis
           }
         ],
-        series : this.props.data[2].data.map((v) => Object.assign({}, v, {areaStyle: {normal: {}}, type:'line', stack: '总量'}))
+        series : this.props.data[2].data.map((v) => Object.assign({}, v))
       }
     }
   }
@@ -57,6 +62,9 @@ export default class Allbook extends Component{
         option: {
           tooltip : {
             trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            },
             formatter: (params) => {
               let str = params[0].name.toString()
               params.map((v) => {
@@ -91,7 +99,7 @@ export default class Allbook extends Component{
           xAxis : [
             {
               type : 'category',
-              boundaryGap : false,
+              boundaryGap : newxProps.data[1].boundaryGap,
               data : newxProps.data[1].data
             }
           ],
@@ -105,7 +113,7 @@ export default class Allbook extends Component{
               }          
             }
           ],
-          series : newxProps.data[2].data.map((v) => Object.assign({}, v, {areaStyle: {normal: {}}, type:'line', stack: '总量'}))
+          series : newxProps.data[2].data.map((v) => Object.assign({}, v))
         }
       })
     }
@@ -113,7 +121,10 @@ export default class Allbook extends Component{
       this.setState({
         option: {
           tooltip : {
-            trigger: 'axis'
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
           },
           legend: {
             data: newxProps.data[0].legend.map((v)=> v.toString()),
@@ -134,7 +145,7 @@ export default class Allbook extends Component{
           xAxis : [
             {
               type : 'category',
-              boundaryGap : false,
+              boundaryGap : newxProps.data[1].boundaryGap,
               data : newxProps.data[1].data
             }
           ],
@@ -143,7 +154,7 @@ export default class Allbook extends Component{
               type : newxProps.data[2].yAxis
             }
           ],
-          series : newxProps.data[2].data.map((v) => Object.assign({}, v, {areaStyle: {normal: {}}, type:'line', stack: '总量'}))
+          series : newxProps.data[2].data.map((v) => Object.assign({}, v))
         }
       })
     }
@@ -153,7 +164,7 @@ export default class Allbook extends Component{
     return this.props.data!==nextProps.data
   }
   render(){
-    return <ReactEcharts theme='my_theme' notMerge={true} ref={(e) => { this.echarts_react = e; }}  option={this.state.option} style={{height: '800px', width: '100%'}} className='react_for_echarts' />
+    return <ReactEcharts theme='my_theme' notMerge={true}  option={this.state.option} style={{height: '800px', width: '100%'}} className='react_for_echarts' />
   }
 }
 

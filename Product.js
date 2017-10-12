@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 // import { connect } from 'dva';
-import { DatePicker, Button, Switch, Spin } from 'antd'
+import { DatePicker, Button, Switch } from 'antd'
 import "antd/lib/button/style"
 import "antd/lib/date-picker/style"
 import "antd/lib/select/style"
@@ -13,7 +13,12 @@ import Charts from './components/Charts'
 import Table from './components/Table'
 import $ from 'jquery'
 
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+
 const dateFormat = 'YYYY/MM/DD'
+const monthFormat = 'YYYY/MM';
+const { MonthPicker } = DatePicker
 const RangePicker = DatePicker.RangePicker
 
 export default class Product extends Component {
@@ -29,7 +34,10 @@ export default class Product extends Component {
       tag: {},
       ratio_chart: [],
       ratio: false,
-      loading: false
+      loading: false,
+      action: "",
+      table: null,
+      report_date: ""
     }
   }
 
@@ -40,7 +48,13 @@ export default class Product extends Component {
     })
     return 
   }
-  getTag = (v, name) => {
+  getMonth = (dates,dataString) =>{
+    this.setState({
+      report_date: dataString
+    })
+    return 
+  }
+  getTag = (v, name, defaultValue, fn=()=>{} ) => {
     let tag = this.state.tag
     for (let i in tag){
       if(v[v.length-1]=="明细"){
@@ -52,7 +66,7 @@ export default class Product extends Component {
         }
       }
       else if(v.length == 0){
-        tag[name] = "全部"
+        tag[name] = defaultValue
       }
       else{
         tag[name] = v[v.length-1]
@@ -61,13 +75,16 @@ export default class Product extends Component {
     this.setState({
       tag: tag
     })
+    fn()
     return 
   }
   getChart = () => {
     let result = {
       from_date: this.state.from_date,
       end_date: this.state.end_date,
-      tag: this.state.tag
+      report_date: this.state.report_date,
+      tag: this.state.tag,
+      action: this.state.action
     }
     this.setState({
       loading: true
@@ -75,27 +92,38 @@ export default class Product extends Component {
     getChart(result).then((res)=>{
       let a = []
       if(res.body){
-        res.columns.map((v) => {
-          if(v.extra){
-            a.push({
-              title: v.title?v.title.toUpperCase():null,
-              key: v.key,
-              extra: v.extra.percents?"percents":(v.extra.thousands?"thousands":null)
-            })
-          }
-          else{
-            a.push({
-              title: v.title?v.title.toUpperCase():null,
-              extra: "",
-              key: v.key
-            })
-          }
-        })
+        if(Array.isArray(res.columns[2])){
+          a = res.columns
+        }
+        else{
+          res.columns.map((v) => {
+            if(v.extra){
+              a.push({
+                title: v.title?v.title.toUpperCase():null,
+                key: v.key,
+                extra: {
+                  percents: v.extra.percents?true:false,
+                  thousands: v.extra.thousands?true:false,
+                  cell_color: v.extra.cell_color?true:false,
+                  limit: v.extra.limit?true:false,
+                }
+              })
+            }
+            else{
+              a.push({
+                title: v.title?v.title.toUpperCase():null,
+                extra: "",
+                key: v.key
+              })
+            }
+          })
+        }
       }
       this.setState({
+        table: res.table?res.table:null,
         loading: false,
-        charts: res.chart,
-        ratio_chart: res.ratio_chart,
+        charts: res.chart?res.chart:[],
+        ratio_chart: res.ratio_chart?res.ratio_chart:[],
         columns: a,
         body: res.body
       })
@@ -124,11 +152,15 @@ export default class Product extends Component {
         forms: res.forms?res.forms:[],
         from_date: res.forms?res.forms[0].attributes.from_date:"",
         end_date: res.forms?res.forms[0].attributes.end_date:"",
+        report_date: res.forms?(res.forms[0].attributes.defaultValue?res.forms[0].attributes.defaultValue.slice(0,7):null):null,
         tag: a,
-        loading: false
+        loading: false,
+        action: res.action
       })
     })
   }
+
+
   onChange = (v) => {
     this.setState({
       ratio: v
@@ -136,7 +168,6 @@ export default class Product extends Component {
   }
   render() {
     return (
-      <Spin tip="数据读取中..." spinning={this.state.loading} size="large">
         <div className="content">
           {
             this.state.forms.length==0?null:(
@@ -146,12 +177,18 @@ export default class Product extends Component {
                     this.state.forms.map((v, index) => {
                       if(v.attributes.input_type == "datetime"){
                         return  <div className="rangePicker"  key={index}>
-                                  <span className="formsLabel">{v.name}:</span>
+                                  <span className="formsLabel">{v.attributes.label_text}:</span>
                                   <RangePicker style={{'width': "70%"}} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今天": [moment(), moment()], '这个月': [moment(), moment().endOf('month')] }} onChange={this.getDate}/>
                                 </div>
                       }
+                      else if(v.attributes.input_type == "datetime_month"){
+                        return  <div className="rangePicker"  key={index}>
+                                  <span className="formsLabel">{v.attributes.label_text}:</span>
+                                  <MonthPicker style={{'width': "70%"}} defaultValue={moment(v.attributes.defaultValue, monthFormat)} onChange={this.getMonth}/>
+                                </div>
+                      }
                       else if(v.attributes.input_type == "select"){
-                        return <Selects attributes={v.attributes} tagValue={this.state.tag[v.name]} tagchange={this.getTag} name={v.name} key={index}/>
+                        return <Selects attributes={v.attributes} tagValue={this.state.tag[v.name]} tagchange={this.getTag} name={v.name} labelName={v.attributes.label_text} key={index}/>
                       }
                     })
                   }
@@ -173,14 +210,13 @@ export default class Product extends Component {
             )
           }
           {
-            this.state.body.length==0?null:(
+            this.state.columns.length==0?null:(
               <div className="TableReact" >
-                <Table columns={this.state.columns} data={this.state.body} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }}/>
+                <Table columns={this.state.columns} table={this.state.table} data={this.state.body} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }}/>
               </div>
             )
           }
         </div>
-      </Spin>
     )
   }
 }
