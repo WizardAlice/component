@@ -24,7 +24,7 @@ export default class TopNav extends Component {
             TigerData
           </Menu.Item>
           <SubMenu title={<span><Icon type="seed" />实验室报表</span>}>
-            <Menu.Item key="seed:1"><a href="http://localhost:8000/#/seed/activity_situation_reports">用户概括</a></Menu.Item>
+            <Menu.Item key="seed:1"><a href="/#/seed/activity_situation_reports">用户概括</a></Menu.Item>
             <Menu.Item key="seed:2"><a href="http://localhost:8000/#/seed/business_activation_reports">用户线新增</a></Menu.Item>
             <Menu.Item key="seed:3"><a href="http://localhost:8000/#/seed/activity_reports">活跃用户</a></Menu.Item>
             <Menu.Item key="seed:16"><a href="http://localhost:8000/#/seed/activation_new_reports">新增用户</a></Menu.Item>

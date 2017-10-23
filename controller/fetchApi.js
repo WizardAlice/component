@@ -23,9 +23,9 @@ export function gettable(){
 // let url_head = "http://localhost:3000"
 let url_head = ""
 
-export function getForm(){
-  let str = getUrl(window.location.href)
-  return fetch(url_head+str,{
+export function getForm(str){
+  // let str = getUrl(window.location.href)
+  return fetch(url_head+str+".json",{
     credentials : "include",
     mode: "cors",
     // headers: {
@@ -43,10 +43,11 @@ export function getForm(){
 }
 
 //我这默认黑箱的情况下可怎么改名啊！！！
-export function getChart({from_date = "", end_date = "", tag, action, report_date = ""}){
+export function getChart({from_date = "", end_date = "", tag, action, report_date = "", check_box = []}){
   let select = objectToString(tag)
   report_date = oneDate(report_date)
-  let str = url_head+action+".json?"+"report[from_date]="+from_date+"&report[end_date]="+end_date+report_date+select
+  check_box = (check_box.length == 0 ? "" : ("&report[check_box]="+check_box))
+  let str = url_head+action+".json?"+"report[from_date]="+from_date+"&report[end_date]="+end_date+report_date+select+check_box
   return fetch(str,{
   // return fetch("http://localhost:8888/suibian",{
     credentials : "include",
@@ -63,7 +64,10 @@ export function getChart({from_date = "", end_date = "", tag, action, report_dat
       ratio_chart: data.ratio_chart,
       body: data.body,
       columns: data.columns,
-      table: data.table
+      table: data.table,
+      recursion: data.recursion,
+      foot: data.foot,
+      hide_columns: data.hide_columns
     }
   })
 }

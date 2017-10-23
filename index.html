@@ -4,19 +4,36 @@
   <meta charset="UTF-8">
   <title>Demo</title>
   <link rel="stylesheet" href="index.css" />
-  <script>
-	
-function suibian(){
-    console.log("hahahaha")
-}
-suibian()
-</script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script type="text/javascript" src="moment-with-locales.js"></script> 
 </head>
+<script>
+  var Event = {
+      on: function (eventName, callback) {
+          if(!this.handles){     //给event对象添加一个handles属性
+               this.handles={};    
+          }      
+         if(!this.handles[eventName]){   //给handles属性中添加即将包含名为xx的一系列方法的空数组
+              this.handles[eventName]=[];
+         }
+         this.handles[eventName].push(callback);   //将方法传入到上面的空数组中
+      },
+      emit: function (eventName) {
+         if(this.handles[arguments[0]]){
+             for(var i=0;i<this.handles[arguments[0]].length;i++){    //挨个调用一系列方法
+                 this.handles[arguments[0]][i](arguments[1]);
+             }
+         }
+      }
+  };
+</script>
 <body>
-
 <div id="root"></div>
 
 <script src="common.js"></script>
 <script src="index.js"></script>
+<script>
+	Event.emit('change_menu', "/seed/solution_conversion_reports/form_part|新事件转化率(第三方数据)");
+</script>
 </body>
 </html>

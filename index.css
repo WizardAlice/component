@@ -17,7 +17,7 @@ html, body, #root {
 }
 
 .form {
-  height: 100px;
+  min-height: 100px;
   width: 90%;
   display: inline-flex;
   justify-content: space-around;
@@ -78,4 +78,13 @@ html, body, #root {
 }
 .EchartsReact{
   margin-top: 2%;
+}
+.checkbox {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 0 5% 0 5%;
+}
+.dataTables_scrollBody{
+  max-height:400px;
 }
