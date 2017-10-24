@@ -42,7 +42,7 @@ export default class Product extends Component {
       report_date: "",
       loading: false,
       check_box: [],
-      foot: null,
+      foot: [],
       hide_columns: null
     }
   }
@@ -137,7 +137,7 @@ export default class Product extends Component {
         body: res.body,
         loading: false,
         recursion: res.recursion?res.recursion:null,
-        foot: res.foot?res.foot:null,
+        foot: res.foot?res.foot:[],
         hide_columns: res.hide_columns?res.hide_columns:null
       })
     }).catch((error) => {
