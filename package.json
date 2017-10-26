@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "antd": "^2.8.0",
+    "classnames": "^2.2.5",
     "echarts": "^3.6.2",
     "echarts-for-react": "^1.4.4",
     "eslint-plugin-import": "^2.7.0",

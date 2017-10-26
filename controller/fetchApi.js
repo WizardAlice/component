@@ -37,7 +37,8 @@ export function getForm(str){
     }).then((data)=>{
       return {
         forms: data.form.form_items,
-        action: data.form.action
+        action: data.form.action,
+        nav: data.nav
       }
     })
 }
@@ -67,7 +68,8 @@ export function getChart({from_date = "", end_date = "", tag, action, report_dat
       table: data.table,
       recursion: data.recursion,
       foot: data.foot,
-      hide_columns: data.hide_columns
+      hide_columns: data.hide_columns,
+      nav: data.nav
     }
   })
 }

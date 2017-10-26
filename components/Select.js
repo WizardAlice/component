@@ -21,6 +21,17 @@ export default class Selects extends Component {
     })
   }
 
+  filter = (inputValue, option) => {
+    var list = inputValue.toString().toLowerCase().split(" ")
+    var res = true
+    list.map((v) => {
+      if(!option.props.value.toLowerCase().includes(v)){
+        res = false
+      }
+    })
+    return res
+  }
+
   onSearch = (v) => {  //因为终端属性已经满足需求了，所以只能写在不会造成影响的这里了。即所有具有伪搜索功能的下拉框，都需要以分组的形式，而相当于切换两个数组。而不需要的就不会绑定此函数，但是后期可能还需要避免多个select的关联带入到上面的select中
     if(v){
       let data = cloneObj(this.props.attributes)
@@ -45,7 +56,7 @@ export default class Selects extends Component {
         <span className="formsLabel">{this.props.labelName}:</span>
         {
           Array.isArray(this.state.attributes.data[this.state.attributes.data.length-1])?
-            <Select showSearch onChange={(v)=>this.props.tagchange(v, this.props.name,attributes.default,()=>this.onSearch(""))} onSearch={(v) => this.onSearch(v)} onBlur={(v) => this.onBlur(v)} value={this.props.tagValue} tags={true} multiple={false} style={{ width: "70%" }} defaultValue={attributes.default} >
+            <Select showSearch filterOption={(inputValue, option) => this.filter(inputValue, option)} onChange={(v)=>this.props.tagchange(v, this.props.name,attributes.default,()=>this.onSearch(""))} onSearch={(v) => this.onSearch(v)} onBlur={(v) => this.onBlur(v)} value={this.props.tagValue} tags={true} multiple={false} style={{ width: "70%" }} defaultValue={attributes.default} >
               {
                 attributes.data.slice(0,this.props.attributes.data.length-1).map((vv, i) => {
                   return (<OptGroup label={vv[0]} key={i}>
@@ -58,7 +69,7 @@ export default class Selects extends Component {
                 })
               }
             </Select>:
-            <Select showSearch optionFilterProp="children" onChange={(v)=>this.props.tagchange(v, this.props.name,attributes.default)} onBlur={(v) => this.onBlur(v)} value={this.props.tagValue} tags={true} multiple={false} style={{ width: "70%" }} defaultValue={attributes.default} >
+            <Select showSearch  filterOption={(inputValue, option) => this.filter(inputValue, option)} optionFilterProp="children" onChange={(v)=>this.props.tagchange(v, this.props.name,attributes.default)} onBlur={(v) => this.onBlur(v)} value={this.props.tagValue} tags={true} multiple={false} style={{ width: "70%" }} defaultValue={attributes.default} >
               {
                 attributes.data.map((vv, i) => {
                   return <Option value={vv} key={i}>{vv}</Option>

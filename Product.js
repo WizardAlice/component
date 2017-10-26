@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 // import { connect } from 'dva';
-import { DatePicker, Button, Switch , Checkbox , Affix } from 'antd'
+import { DatePicker, Button, Switch , Checkbox , Affix , Tabs } from 'antd'
 import "antd/lib/button/style"
 import "antd/lib/date-picker/style"
 import "antd/lib/select/style"
@@ -15,14 +15,15 @@ import Charts from './components/Charts'
 import Table from './components/Table'
 import $ from 'jquery'
 
-import 'moment/locale/zh-cn';
-moment.locale('zh-cn');
+import 'moment/locale/zh-cn'
+moment.locale('zh-cn')
 
 const dateFormat = 'YYYY/MM/DD'
-const monthFormat = 'YYYY/MM';
+const monthFormat = 'YYYY/MM'
 const { MonthPicker } = DatePicker
 const RangePicker = DatePicker.RangePicker
 const CheckboxGroup = Checkbox.Group
+const TabPane = Tabs.TabPane
 
 export default class Product extends Component {
   constructor(props, context){
@@ -43,7 +44,8 @@ export default class Product extends Component {
       loading: false,
       check_box: [],
       foot: [],
-      hide_columns: null
+      hide_columns: null,
+      nav: null
     }
   }
 
@@ -182,7 +184,8 @@ export default class Product extends Component {
           columns: [],  //用以切换界面的时候，下面的表格和图标数据清空
           charts: [],
           loading: false,
-          check_box: check_box
+          check_box: check_box,
+          nav: res.nav?res.nav:null
         })
       })
     }); 
@@ -208,7 +211,8 @@ export default class Product extends Component {
         tag: a,
         action: res.action,
         loading: false,
-        check_box: check_box
+        check_box: check_box,
+        nav: res.nav?res.nav:null
       })
     })
   }
@@ -224,6 +228,11 @@ export default class Product extends Component {
     this.setState({
       check_box: v
     })
+  }
+  changeNav =(key) => {
+    this.setState({
+      action: key
+    },()=> this.getChart())
   }
 
   render() {
@@ -269,6 +278,16 @@ export default class Product extends Component {
             )
           }
           {
+            Object.is(this.state.nav, null) ? null:(
+            <Tabs onChange={(k) => this.changeNav(k)}>
+              {
+                Object.keys(this.state.nav).map((v, index) => {
+                  return <TabPane tab={v} key={this.state.nav[v]} />
+                })
+              }
+            </Tabs>
+          )}
+          {
             this.state.charts.length==0?null:(
               <div className="EchartsReact">
                 <div className="radioSwitch"><span>占比：</span><Switch defaultChecked={false} onChange={this.onChange} /></div>
@@ -279,7 +298,7 @@ export default class Product extends Component {
           {
             this.state.columns.length==0?null:(
               <div className="TableReact" >
-                <Table hide_columns={this.state.hide_columns} columns={this.state.columns} table={this.state.table} recursion={this.state.recursion} data={this.state.body} foot={this.state.foot} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }}/>
+                <Table hide_columns={this.state.hide_columns} columns={this.state.columns} flag={false} table={this.state.table} recursion={this.state.recursion} data={this.state.body} foot={this.state.foot} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }}/>
               </div>
             )
           }

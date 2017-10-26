@@ -1,6 +1,8 @@
+//包含多种类型的table
 import React,{Component} from 'react'
 import { changeCol , cloneObj , handle_recursion , getColor , handle_recursion_lost } from '../controller/method'
 import { Modal , Button } from 'antd'
+import cx from 'classnames'
 
 
 function getPercents(num) {
@@ -33,7 +35,8 @@ export default class Table extends Component{
       current: "",
       columns: this.props.columns,
       foot: this.props.foot,
-      hide_columns: this.props.hide_columns
+      hide_columns: this.props.hide_columns,
+      flag: this.props.flag
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -53,16 +56,17 @@ export default class Table extends Component{
         recursion: nextProps.recursion,
         columns: nextProps.columns,
         foot: nextProps.foot,
-        hide_columns: nextProps.hide_columns
+        hide_columns: nextProps.hide_columns,
+        flag: nextProps.flag
       })
     }
   }
   shouldComponentUpdate(nextProps, nextState){
-    if(this.props.data==nextProps.data && this.state.visible == nextState.visible){
+    if(this.props.data==nextProps.data && this.state == nextState){
       return false
     }else{
       if(this.props.data.length != 0){
-        $("#"+nextState.idTodestroy).DataTable().destroy()
+        // $("#"+nextState.idTodestroy).DataTable().destroy()
       }
       return true
     }
@@ -72,22 +76,26 @@ export default class Table extends Component{
   // // }
   componentDidMount(){
     if(this.props.data.length != 0){
-      init_dataTables(this.state.id,{
-        columnDefs: [{
-          targets: this.state.hide_columns,
-          visible: false
-        }]
-      })
+      // init_dataTables(this.state.id,{
+      //   columnDefs: [{
+      //     targets: this.state.hide_columns,
+      //     visible: false
+      //   }]
+      // })
     }
   }
   componentDidUpdate(){
     if(this.props.data.length != 0){
-      init_dataTables(this.state.id,{
-        columnDefs: [{
-          targets: this.state.hide_columns,
-          visible: false
-        }]
-      })
+      if(this.state.flag && $('table').find('th, td').children('div').length == 0){
+        $('table').find('th, td').wrapInner('<div>')
+      }else{
+        // init_dataTables(this.state.id,{
+        //   columnDefs: [{
+        //     targets: this.state.hide_columns,
+        //     visible: false
+        //   }]
+        // })
+      }
     } 
   }
 
@@ -160,6 +168,16 @@ export default class Table extends Component{
   handleCancel = () => {
     this.setState({
       visible: false
+    })
+  }
+
+  reverse = () => {
+    let idTodestroy = this.state.id
+    let id = Math.random().toString(36).substr(2)
+    this.setState({
+      flag: !this.state.flag,
+      id: id,
+      idTodestroy: idTodestroy
     })
   }
 
@@ -264,12 +282,13 @@ export default class Table extends Component{
           }
           </Modal>
         ):null}
-        <table id={this.state.id} className="table table-bordered table-hover" cellspacing="0" width="100%">
+        <Button onClick={()=> this.reverse()}>行列置换</Button>
+        <table id={this.state.id} className={cx({vertical: this.state.flag, 'table table-bordered table-hover': true})} cellspacing="0" width="100%">
           {this.getHead(this.state.columns)}
           <tbody>
             {this.getBody(this.props.data, this.state.columns)}
           </tbody>
-          {this.state.foot? (
+          {this.state.foot.length!=0? (
             <tfoot>
               {this.getBody(this.props.foot, this.state.columns)}
             </tfoot>
