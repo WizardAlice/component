@@ -41,6 +41,10 @@ export default class Table extends Component{
   }
   componentWillReceiveProps(nextProps) {
     if(this.props.data!==nextProps.data){
+      if(this.state.flag){
+        $("#table").removeClass('overx')
+        $('table').removeClass('vertical')
+      }
       let idTodestroy = this.state.id
       let id = Math.random().toString(36).substr(2)
       this.setState({
@@ -62,11 +66,11 @@ export default class Table extends Component{
     }
   }
   shouldComponentUpdate(nextProps, nextState){
-    if(this.props.data==nextProps.data && this.state == nextState){
+    if(this.props.data==nextProps.data && this.state.visible == nextState.visible){
       return false
     }else{
       if(this.props.data.length != 0){
-        // $("#"+nextState.idTodestroy).DataTable().destroy()
+        $("#"+nextState.idTodestroy).DataTable().destroy()
       }
       return true
     }
@@ -76,27 +80,59 @@ export default class Table extends Component{
   // // }
   componentDidMount(){
     if(this.props.data.length != 0){
-      // init_dataTables(this.state.id,{
-      //   columnDefs: [{
-      //     targets: this.state.hide_columns,
-      //     visible: false
-      //   }]
-      // })
+      init_dataTables(this.state.id,{
+        columnDefs: [{
+          targets: this.state.hide_columns,
+          visible: false
+        }]
+      })
     }
   }
   componentDidUpdate(){
     if(this.props.data.length != 0){
-      if(this.state.flag && $('table').find('th, td').children('div').length == 0){
-        $('table').find('th, td').wrapInner('<div>')
-      }else{
-        // init_dataTables(this.state.id,{
-        //   columnDefs: [{
-        //     targets: this.state.hide_columns,
-        //     visible: false
-        //   }]
-        // })
-      }
+      init_dataTables(this.state.id,{
+        columnDefs: [{
+          targets: this.state.hide_columns,
+          visible: false
+        }]
+      })
     } 
+  }
+
+  changeCol = (v) => {
+    let idTodestroy = this.state.id
+    let id = Math.random().toString(36).substr(2)
+    this.setState({
+      columns: changeCol(this.state.columns, v, this.state.current),
+      list: changeCol(this.state.list, v, this.state.current),
+      id: id,
+      idTodestroy: idTodestroy,
+      visible: false,
+      recursion: this.props.recursion
+    })
+  }
+
+  reverse = () => {
+    if(!this.state.flag){
+      init_dataTables(this.state.id,{buttons: null, scrollX: false, columnDefs: [{
+        targets: this.state.hide_columns,
+        visible: false
+      }]})
+      $("#table").addClass('overx')
+      $('table').addClass('vertical')
+      this.setState({
+        flag: !this.state.flag
+      })
+      return
+    }else{
+      this.setState({
+        flag: !this.state.flag
+      })
+      $("#table").removeClass('overx')
+      $('table').removeClass('vertical')
+      init_dataTables(this.state.id,{})
+      return
+    }
   }
 
   showData = (extra, base) => {
@@ -136,14 +172,18 @@ export default class Table extends Component{
           <tr>
             {columns[1].map((v,i) => {
               return  <th key={i} rowSpan={v[1].rowSpan.toString()} colSpan={v[1].colSpan.toString()} style={{textAlign: "center"}}>
-                        {v[0]}
+                        <div>
+                          {v[0]}
+                        </div>
                       </th>
             })}
           </tr>
           <tr>
             {columns[2].map((v) => {
               return  <th key={v.key}>
-                        {v.title}
+                        <div>
+                          {v.title}
+                        </div>
                       </th>
             })}
           </tr>
@@ -156,7 +196,9 @@ export default class Table extends Component{
           <tr>
             {columns.map((v) => {
               return  <th key={v.key} onMouseEnter={(v.extra&&v.extra.changeable)?(() => this.addKeyListener(v.key)):(()=>{})} onMouseLeave={(v.extra&&v.extra.changeable)?(() => this.RemoveKeyListener(v.key)):(()=>{})}>
-                        {v.title}
+                        <div>
+                          {v.title}
+                        </div>
                       </th>
             })}
           </tr>
@@ -168,16 +210,6 @@ export default class Table extends Component{
   handleCancel = () => {
     this.setState({
       visible: false
-    })
-  }
-
-  reverse = () => {
-    let idTodestroy = this.state.id
-    let id = Math.random().toString(36).substr(2)
-    this.setState({
-      flag: !this.state.flag,
-      id: id,
-      idTodestroy: idTodestroy
     })
   }
 
@@ -199,7 +231,7 @@ export default class Table extends Component{
                   }
                   return
                 })
-                return (<td key={i3}>{this.showData(x.extra, base)}</td>)
+                return (<td key={i3}><div>{this.showData(x.extra, base)}</div></td>)
               })
             }
           </tr>
@@ -219,8 +251,10 @@ export default class Table extends Component{
                 let last = (vv.extra.recursion?(  count==1 ?  handle_recursion(v[this.state.list[index1-1].key], v[this.state.list[index1-2].key]) : handle_recursion(v[this.state.list[index1-1].key], v[this.state.list[index1-4].key])    ) : 
                   (vv.extra.recursion_lost ? (  count==1 ?  handle_recursion_lost(v[this.state.list[index1-2].key], v[this.state.list[index1-3].key]) : handle_recursion_lost(v[this.state.list[index1-2].key], v[this.state.list[index1-5].key])    ) : v[vv.key]))
                 return  <td key={index1} style={vv.extra.cell_color?{backgroundColor: getColor(v[vv.key], v["main"])}:null}>
-                          { vv.extra.recursion||vv.extra.recursion_lost ? ( this.showData(vv.extra, last) ) : 
-                            v[vv.key] ? this.showData(vv.extra, last) :"" }
+                          <div>
+                            { vv.extra.recursion||vv.extra.recursion_lost ? ( this.showData(vv.extra, last) ) : 
+                              v[vv.key] ? this.showData(vv.extra, last) :"" }
+                          </div>
                         </td>
               })
             }
@@ -235,7 +269,9 @@ export default class Table extends Component{
             {
               this.state.list.map((vv, index1) => {
                 return  <td key={index1} style={vv.extra.cell_color?{backgroundColor: getColor(v[vv.key], v["main"])}:null}>
-                          {v[vv.key] ?(this.showData(vv.extra, v[vv.key])):""}
+                          <div>
+                            {v[vv.key] ?(this.showData(vv.extra, v[vv.key])):""}
+                          </div>
                         </td>
               })
             }
@@ -243,15 +279,6 @@ export default class Table extends Component{
         )
       }))
     }
-  }
-
-  changeCol = (v) => {
-    this.setState({
-      columns: changeCol(this.state.columns, v, this.state.current),
-      list: changeCol(this.state.list, v, this.state.current),
-      visible: false,
-      recursion: this.props.recursion
-    })
   }
 
   renderChangeItems = (recursion) => {
@@ -270,7 +297,7 @@ export default class Table extends Component{
 
   render(){
     return(
-      <div >
+      <div id="table">
         {this.state.recursion?(
           <Modal title="更换阶段顺序" 
             visible={this.state.visible}  
@@ -282,8 +309,10 @@ export default class Table extends Component{
           }
           </Modal>
         ):null}
-        <Button onClick={()=> this.reverse()}>行列置换</Button>
-        <table id={this.state.id} className={cx({vertical: this.state.flag, 'table table-bordered table-hover': true})} cellspacing="0" width="100%">
+        {this.state.recursion?(
+          <Button onClick={()=> this.reverse()}>行列置换</Button>
+        ):null}
+        <table id={this.state.id} className="table table-bordered table-hover" cellspacing="0" width="100%">
           {this.getHead(this.state.columns)}
           <tbody>
             {this.getBody(this.props.data, this.state.columns)}

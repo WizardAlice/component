@@ -97,14 +97,12 @@ table.vertical {
     -ms-writing-mode: tb-lr;  
     writing-mode: vertical-lr;  
 }  
-table.vertical th, table.vertical td {  
-    width: 100px;  
-    height: 14px;  
-}  
 table.vertical div {  
-    width: 100px;  
     -webkit-writing-mode: horizontal-tb;  
     -moz-writing-mode: horizontal-tb;  
     -ms-writing-mode: lr-tb;  
     writing-mode: horizontal-tb;  
-}  
+} 
+.overx {
+  overflow: auto;
+}
