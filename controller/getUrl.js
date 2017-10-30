@@ -13,7 +13,8 @@ const list = {
     "conversion_reports": "/seed/conversion_reports/form_part",
     "invalid_activity_reports": "/seed/invalid_activity_reports/form_part",
     "solution_ratio_reports": "/seed/solution_ratio_reports/form_part",
-    "overline_service_reports": "/seed/overline_service_reports/form_part"
+    "overline_service_reports": "/seed/overline_service_reports/form_part",
+    "solution_conversion_reports": "/seed/solution_conversion_reports/form_part"
   },
   "dm": {
     "activity_reports": "/dm/activity_reports/form_part",

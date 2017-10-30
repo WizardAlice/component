@@ -20,11 +20,11 @@ export function gettable(){
   })
 }
 
-// let url_head = "http://localhost:3000"
-let url_head = ""
+let url_head = "https://themis.didiman.com"
+// let url_head = ""
 
-export function getForm(str){
-  // let str = getUrl(window.location.href)
+export function getForm(){
+  let str = getUrl(window.location.href)
   return fetch(url_head+str+".json",{
     credentials : "include",
     mode: "cors",

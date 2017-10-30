@@ -45,7 +45,8 @@ export default class Product extends Component {
       check_box: [],
       foot: [],
       hide_columns: null,
-      nav: null
+      nav: null,
+      error: false
     }
   }
 
@@ -158,39 +159,9 @@ export default class Product extends Component {
   componentDidMount() {
     this.setState({
       loading: true
-    })
-    Event.on('change_menu',(result) => {
-      getForm(result.split("|")[0]).then((res) => {
-        let a = {}
-        let check_box = []
-        if(res.forms){
-          res.forms.map((v)=>{
-            if(v.attributes.input_type=="select"){
-              a[v.name] = v.attributes.default
-            }
-            if(v.attributes.input_type=="checkbox"){
-              check_box = v.attributes.default
-            }
-          })
-        }
-        this.setState({
-          forms: res.forms?res.forms:[],
-          from_date: res.forms?res.forms[0].attributes.from_date:"",
-          end_date: res.forms?res.forms[0].attributes.end_date:"",
-          report_date: res.forms?(res.forms[0].attributes.defaultValue?res.forms[0].attributes.defaultValue.slice(0,7):null):null,
-          tag: a,
-          action: res.action,
-          target: result,
-          columns: [],  //用以切换界面的时候，下面的表格和图标数据清空
-          charts: [],
-          loading: false,
-          check_box: check_box,
-          nav: res.nav?res.nav:null
-        })
-      })
-    }); 
+    }) 
 
-    getForm("/seed/activity_situation_reports/form_part").then((res) => {
+    getForm().then((res) => {
       let a = {}
       let check_box = []
       if(res.forms){
@@ -214,6 +185,12 @@ export default class Product extends Component {
         check_box: check_box,
         nav: res.nav?res.nav:null
       })
+    }).catch((error) => {
+      console.log(error)
+      this.setState({
+        error: true
+      })
+      window.open("https://themis.didiman.com?close=true","newWindow","menubar=0,scrollbars=1, height=460, width=700,resizable=1,status=1,titlebar=0,toolbar=0,location=1")
     })
   }
 
@@ -238,6 +215,9 @@ export default class Product extends Component {
   render() {
     return (
         <div className="content">
+          {this.state.error?(
+            <h5>报表(impala)系统登录成功之后刷新该页面</h5>
+          ):null}
           {
             this.state.forms.length==0?null:(
               <Affix offsetTop={51}>
