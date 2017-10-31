@@ -20,7 +20,7 @@ export function gettable(){
   })
 }
 
-let url_head = "https://themis.didiman.com"
+let url_head = "https://themis.didiman.com/"
 // let url_head = ""
 
 export function getForm(){

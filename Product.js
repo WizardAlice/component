@@ -190,10 +190,8 @@ export default class Product extends Component {
       this.setState({
         error: true
       })
-      window.open("https://themis.didiman.com?close=true","newWindow","menubar=0,scrollbars=1, height=460, width=700,resizable=1,status=1,titlebar=0,toolbar=0,location=1")
     })
   }
-
 
   onChange = (v) => {
     this.setState({
@@ -216,7 +214,7 @@ export default class Product extends Component {
     return (
         <div className="content">
           {this.state.error?(
-            <h5>报表(impala)系统登录成功之后刷新该页面</h5>
+            <h5>初次使用新数据源页面，请先<a href="https://themis.didiman.com" target="blank" style={{textDecoration: "underline"}}>登录didiman</a>新系统后，再刷新此页面。</h5>
           ):null}
           {
             this.state.forms.length==0?null:(
