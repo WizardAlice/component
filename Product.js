@@ -70,9 +70,9 @@ export default class Product extends Component {
         if(i==name){
           tag[name] = v[v.length-1]
         }
-        else if(tag[i]=="明细"){
-          tag[i] = "全部"
-        }
+        // else if(tag[i]=="明细"){
+        //   tag[i] = "全部"
+        // }
       }
       else if(v.length == 0){
         tag[name] = defaultValue
