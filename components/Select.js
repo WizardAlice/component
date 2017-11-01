@@ -25,7 +25,7 @@ export default class Selects extends Component {
     var list = inputValue.toString().toLowerCase().split(" ")
     var res = true
     list.map((v) => {
-      if(!option.props.value.toLowerCase().includes(v)){
+      if(!option.props.value.toString().toLowerCase().includes(v)){
         res = false
       }
     })
