@@ -10,6 +10,7 @@ import "antd/lib/spin/style"
 import "antd/lib/modal/style"
 import "antd/lib/affix/style"
 import { getForm, getChart } from "./controller/fetchApi"
+import { removeByValue , cloneObj } from "./controller/method"
 import Selects  from './components/Select'
 import Charts from './components/Charts'
 import Table from './components/Table'
@@ -80,12 +81,35 @@ export default class Product extends Component {
         tag[name] = v[v.length-1]
       }
     }
+
+    if(name == "hist_solution_code"){   //纯为了方案时间转化率报表能操作某一个不能选择的checkbos
+      if(v[v.length-1] != "全部汇总"){
+        let check_box = cloneObj(this.state.check_box)
+        check_box = removeByValue(check_box, "legacy_active_ct")
+        this.setState({
+          check_box: check_box
+        })
+      }
+      else{
+        let check_box = cloneObj(this.state.check_box)
+        check_box.push("legacy_active_ct")
+        this.setState({
+          check_box: check_box
+        })
+      }
+    }
+
     this.setState({
       tag: tag
     })
     fn()
     return 
   }
+
+  hidedefaultChecks = () => {
+
+  }
+
   getChart = () => {
     let result = {
       from_date: this.state.from_date,
@@ -253,7 +277,7 @@ export default class Product extends Component {
                         }
                         else if(v.attributes.input_type == "checkbox"){
                           return  <div className="checkbox"  key={index+this.state.target+"checkbox"}>
-                                    <CheckboxGroup options={v.attributes.data} defaultValue={v.attributes.default} onChange={this.getCheckBox}/>
+                                    <CheckboxGroup options={v.attributes.data} defaultValue={v.attributes.default} value={this.state.check_box} onChange={this.getCheckBox}/>
                                   </div>
                         }
                         else if(v.attributes.input_type == "datetime_month"){
