@@ -19,17 +19,17 @@
 // fil("alice eric 123", "alice_eric_paradiser") 返回false，因为不包含123
 // fil("alice eric", "alice_eric_paradiser") 返回true
 
-function compact(arr){
-  let res = []
-  arr.map((v) => {
-    if(!res.includes(v)){
-      res.push(v)
-    }
-  })
-  return res
-}
+// function compact(arr){
+//   let res = []
+//   arr.map((v) => {
+//     if(!res.includes(v)){
+//       res.push(v)
+//     }
+//   })
+//   return res
+// }
 
-function getFrequest(str){
-  let arr = str.split("")
-  arr = compact(arr)
-}
+// function getFrequest(str){
+//   let arr = str.split("")
+//   arr = compact(arr)
+// }
