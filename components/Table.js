@@ -268,7 +268,7 @@ export default class Table extends Component{
           <tr key={index} style={v.style}>
             {
               this.state.list.map((vv, index1) => {
-                return  <td key={index1} style={vv.extra.cell_color?{backgroundColor: getColor(v[vv.key], v["main"])}:null}>
+                return  <td key={index1} style={vv.extra.cell_color&&v["main"] ?{backgroundColor: getColor(v[vv.key], v["main"])}:null}>
                           <div>
                             {v[vv.key] ?(this.showData(vv.extra, v[vv.key])):""}
                           </div>
