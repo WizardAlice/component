@@ -17,6 +17,7 @@ function getThousands(num) {
     })
   return newstr;
 }
+
 export default class Table extends Component{
   constructor(props, context) {
     super(props, context)
@@ -158,7 +159,7 @@ export default class Table extends Component{
     window.removeEventListener('keypress', this.showModal, false)
   }
   showModal = (v) => {
-    if(window.event.key == "c"){
+    if(window.event.key == "c" || window.event.keyCode == '99'){
       this.setState({
         visible: true
       })
