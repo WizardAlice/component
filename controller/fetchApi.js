@@ -1,4 +1,6 @@
 import { getUrl, objectToString, oneDate } from './getUrl' 
+require('babel-polyfill')
+import 'whatwg-fetch'
 
 export function gettable(){
   return fetch("http://localhost:8000/chart",{

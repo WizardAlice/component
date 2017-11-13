@@ -5,9 +5,11 @@
   },
   "dependencies": {
     "antd": "^2.8.0",
+    "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "echarts": "^3.6.2",
     "echarts-for-react": "^1.4.4",
+    "es6-promise": "^4.1.1",
     "eslint-plugin-import": "^2.7.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
@@ -15,7 +17,8 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-loading": "^0.1.4",
-    "react-router": "^2.8.0"
+    "react-router": "^2.8.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "atool-build": "^0.9.0",
