@@ -1,6 +1,6 @@
 import { getUrl, objectToString, oneDate } from './getUrl' 
-require('babel-polyfill')
-import 'whatwg-fetch'
+require('babel-polyfill')//此处全部引入，可以拆分
+import 'whatwg-fetch' //此处全部引入，可以拆分
 
 export function gettable(){
   return fetch("http://localhost:8000/chart",{
