@@ -46,7 +46,8 @@ export default class Product extends Component {
       check_box: [],
       foot: [],
       hide_columns: null,
-      nav: null
+      nav: null,
+      sqlError: false
     }
   }
 
@@ -169,7 +170,8 @@ export default class Product extends Component {
     }).catch((error) => {
       console.log('Request failed', error)
       this.setState({
-        loading: false
+        loading: false,
+        sqlError: true
       })
     })
   }
@@ -262,6 +264,9 @@ export default class Product extends Component {
   render() {
     return (
         <div className="content">
+          {this.state.sqlError?(
+            <h5>数据库连接失败，请联系管理员</h5>
+          ):null}
           {
             this.state.forms.length==0?null:(
               <Affix offsetTop={51}>
