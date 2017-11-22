@@ -71,7 +71,8 @@ export function getChart({from_date = "", end_date = "", tag, action, report_dat
       recursion: data.recursion,
       foot: data.foot,
       hide_columns: data.hide_columns,
-      nav: data.nav
+      nav: data.nav,
+      ratio: data.ratio
     }
   })
 }

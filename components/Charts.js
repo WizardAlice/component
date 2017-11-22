@@ -69,6 +69,14 @@ export default class Allbook extends Component{
                   return (value * 100).toFixed(2)  + '%'
                 }
               }          
+            },
+            {
+              type : this.props.data[2].yAxis,
+              axisLabel: {
+                formatter: (value, index) => {
+                  return (value * 100).toFixed(2)  + '%'
+                }
+              }
             }
           ],
           series : this.props.data[2].data.map((v) => Object.assign({}, v))

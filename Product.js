@@ -162,7 +162,8 @@ export default class Product extends Component {
         recursion: res.recursion?res.recursion:null,
         foot: res.foot?res.foot:[],
         hide_columns: res.hide_columns?res.hide_columns:null,
-        sqlError: false
+        sqlError: false,
+        ratio: res.ratio?res.ratio:false
       })
     }).catch((error) => {
       console.log('Request failed', error)
@@ -293,7 +294,7 @@ export default class Product extends Component {
           {
             this.state.charts.length==0?null:(
               <div className="EchartsReact">
-                <div className="radioSwitch"><span>占比：</span><Switch defaultChecked={this.state.ratio} onChange={this.onChange} /></div>
+                <div className="radioSwitch"><span>占比：</span><Switch checked={this.state.ratio} defaultChecked={this.state.ratio} onChange={this.onChange} /></div>
                 <Charts data={this.state.ratio?this.state.ratio_chart:this.state.charts} ratio={this.state.ratio} />
               </div>
             )
