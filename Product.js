@@ -161,7 +161,8 @@ export default class Product extends Component {
         loading: false,
         recursion: res.recursion?res.recursion:null,
         foot: res.foot?res.foot:[],
-        hide_columns: res.hide_columns?res.hide_columns:null
+        hide_columns: res.hide_columns?res.hide_columns:null,
+        sqlError: false
       })
     }).catch((error) => {
       console.log('Request failed', error)
@@ -238,7 +239,7 @@ export default class Product extends Component {
             <h5>初次使用新数据源页面，请先<a href="https://themis.didiman.com" target="blank" style={{textDecoration: "underline"}}>登录didiman</a>新系统后，再刷新此页面。</h5>
           ):null}
           {this.state.sqlError?(
-            <h5>数据库连接失败，请联系管理员</h5>
+            <h5>数据库查询异常，请联系管理员</h5>
           ):null}
           {
             this.state.forms.length==0?null:(
@@ -292,7 +293,7 @@ export default class Product extends Component {
           {
             this.state.charts.length==0?null:(
               <div className="EchartsReact">
-                <div className="radioSwitch"><span>占比：</span><Switch defaultChecked={false} onChange={this.onChange} /></div>
+                <div className="radioSwitch"><span>占比：</span><Switch defaultChecked={this.state.ratio} onChange={this.onChange} /></div>
                 <Charts data={this.state.ratio?this.state.ratio_chart:this.state.charts} ratio={this.state.ratio} />
               </div>
             )
