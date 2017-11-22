@@ -279,7 +279,7 @@ export default class Product extends Component {
                         if(v.attributes.input_type == "datetime"){
                           return  <div className="rangePicker"  key={index+this.state.target+"rangePicker"}>
                                     <span className="formsLabel">{v.attributes.label_text}:</span>
-                                    <RangePicker style={{'width': "70%"}} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
+                                    <RangePicker style={{'width': "70%"}} value={[moment(this.state.from_date, dateFormat), moment(this.state.end_date, dateFormat)]} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
                                   </div>
                         }
                         else if(v.attributes.input_type == "checkbox"){
