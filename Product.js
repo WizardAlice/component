@@ -266,7 +266,7 @@ export default class Product extends Component {
     return (
         <div className="content">
           {this.state.sqlError?(
-            <h5>数据库连接失败，请联系管理员</h5>
+            <h5>数据库查询异常，请联系管理员</h5>
           ):null}
           {
             this.state.forms.length==0?null:(
