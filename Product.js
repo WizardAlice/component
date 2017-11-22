@@ -157,6 +157,7 @@ export default class Product extends Component {
         }
       }
       this.setState({
+        sqlError: false,
         table: res.table?res.table:null,
         charts: res.chart?res.chart:[],
         ratio_chart: res.ratio_chart?res.ratio_chart:[],
