@@ -43,6 +43,7 @@ export default class Allbook extends Component{
     return this.props.data!==nextProps.data
   }
   render(){
+    console.log(this.state.option)
     return <ReactEcharts theme='my_theme' notMerge={true}  option={this.state.option} style={{height: '800px', width: '100%'}} className='react_for_echarts' />
   }
 }

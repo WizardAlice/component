@@ -82,7 +82,7 @@ export function labelFormatter(params){
 
 export function labelFormatterRatio(params){
   if(params.value >0.05){
-    return params.value
+    return (params.value*100).toFixed(2).toString() + "%"
   }else{
     return ""
   }
@@ -106,8 +106,11 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData}){
           str += 'background-color:'+ v.color +'"></span>';
           str += v.seriesName.toString()
           str += " : "
-          str += (v.value*100).toFixed(2)
-          str += "%"
+          if(v.value > 10){
+            str += v.value
+          }else{
+            str += (v.value*100).toFixed(2) + "%"
+          }
         })
         return str
       }
@@ -131,36 +134,56 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData}){
     bottom: '3%',
     containLabel: true
   }
-  let xAxis = x.map((v) => {
-    return {
-      type : 'category',
-      boundaryGap : v.boundaryGap,
-      data : v.data
-    }
-  })
+  let xAxis = {
+    type : 'category',
+    boundaryGap : x.boundaryGap,
+    data : x.data
+  }
 
   let yAxis = y.map((v) => {
-    if (v == "ratio"){
+    if (v.type == "value"){
       return {
-        type : v,
+        type : "value",
         axisLabel: {
           formatter: (value, index) => {
-            return (value * 100).toFixed(2)  + '%'
+            if(ratio === true){
+              return (value * 100).toFixed(2)  + '%'
+            }else{
+              return value
+            }
           }
         }
       }
-    }else if (v == 'num'){
-      return { type: v }
+    }else if (v.type == 'right'){
+      return { type: 'value' , name: v.name,
+        axisLabel: {
+        }
+      }
     }
   })
 
   let series = seriesData.map((v) => {
     if(v.type == "bar"){
       if(ratio === true){
-        debugger
-        v.label.normal.formatter = labelFormatterRatio
+        return Object.assign({}, v, {
+          label: {
+            normal: {
+              show: true,
+              position: 'inside',
+              formatter: labelFormatterRatio
+            }
+          }
+        })
       }else{
-        v.label.normal.formatter = labelFormatter
+        return Object.assign({}, v, {
+          label: {
+            normal: {
+              show: true,
+              position: 'inside',
+              formatter: labelFormatter
+            }
+          }
+        })
       }
     }else{
       return Object.assign({}, v)

@@ -162,7 +162,7 @@ export default class Product extends Component {
         charts: res.chart?res.chart:[],
         ratio_chart: res.ratio_chart?res.ratio_chart:[],
         columns: a,
-        body: res.body,
+        body: res.body?res.body:[],
         loading: false,
         recursion: res.recursion?res.recursion:null,
         foot: res.foot?res.foot:[],
