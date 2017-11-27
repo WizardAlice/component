@@ -218,7 +218,7 @@ export default class Product extends Component {
       })
     }); 
 
-    getForm("/seed/solution_ratio_reports/form_part").then((res) => {
+    getForm("/seed/activity_situation_reports/form_part").then((res) => {
       let a = {}
       let check_box = []
       if(res.forms){
