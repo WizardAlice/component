@@ -237,7 +237,7 @@ export default class Product extends Component {
     return (
         <div className="content">
           {this.state.error?(
-            <h5>初次使用新数据源页面，请先<a href="https://themis.didiman.com" target="blank" style={{textDecoration: "underline"}}>登录didiman</a>新系统后，再刷新此页面。</h5>
+            <h5>初次使用新数据源页面，请先<a href="https://mantis2.appleflying.com" target="blank" style={{textDecoration: "underline"}}>登录mantis2</a>新系统后，再刷新此页面。</h5>
           ):null}
           {this.state.sqlError?(
             <h5>数据库查询异常，请联系管理员</h5>
