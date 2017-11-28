@@ -6,15 +6,21 @@ import cx from 'classnames'
 
 
 function getPercents(num) {
+  if(num < 0){
+    return '0'
+  }
   return (Math.round(num * 10000)/100).toFixed(2) + '%';
 }
 
 function getThousands(num) {
   var number = new Number(num);
-    var str = number.toString();
-    var newstr = str.replace(/\d{1,3}(?=(\d{3})+$)/g,function(s){
-        return s+','
-    })
+  if(number < 0){
+    return '0'
+  }
+  var str = number.toString();
+  var newstr = str.replace(/\d{1,3}(?=(\d{3})+$)/g,function(s){
+      return s+','
+  })
   return newstr;
 }
 
@@ -144,7 +150,7 @@ export default class Table extends Component{
     }else if(extra.limit){
       return base.toFixed(2)
     }else {
-      return base
+      return base>0 ? base : 0
     }
   }
 
