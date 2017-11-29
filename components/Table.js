@@ -150,7 +150,7 @@ export default class Table extends Component{
     }else if(extra.limit){
       return base.toFixed(2)
     }else {
-      return base>0 ? base : 0
+      return base
     }
   }
 
