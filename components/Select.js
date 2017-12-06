@@ -9,7 +9,6 @@ export default class Selects extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      FilterData : this.props.attributes.data[1][1],
       attributes : this.props.attributes,
       search : this.props.search
     }
