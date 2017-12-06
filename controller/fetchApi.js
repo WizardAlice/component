@@ -22,7 +22,7 @@ export function gettable(){
   })
 }
 
-let url_head = "https://mantis2.appleflying.com/"
+let url_head = "https://mantis.appleflying.com:7555/"
 // let url_head = ""
 
 export function getForm(){
