@@ -35,7 +35,8 @@ const list = {
   "ework": {
     "conversion_new_reports": "/ework/conversion_reports/form_part",
     "overline_service_new_reports": "/seed/overline_service_reports/form_part",
-    "seed_conversion_reports": "/seed/conversion_reports/form_part"
+    "seed_conversion_reports": "/seed/conversion_reports/form_part",
+    "business_monthly_new_reports": "/ework/business_monthly_reports/form_part"
   }
 }
 
