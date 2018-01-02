@@ -48,7 +48,8 @@ export default class Product extends Component {
       hide_columns: null,
       nav: null,
       error: false,
-      sqlError: false
+      sqlError: false,
+      order_by: null
     }
   }
 
@@ -163,7 +164,8 @@ export default class Product extends Component {
         foot: res.foot?res.foot:[],
         hide_columns: res.hide_columns?res.hide_columns:null,
         sqlError: false,
-        ratio: res.ratio?res.ratio:false
+        ratio: res.ratio?res.ratio:false,
+        order_by: res.order_by? res.order_by:null
       })
     }).catch((error) => {
       console.log('Request failed', error)
@@ -206,7 +208,9 @@ export default class Product extends Component {
         action: res.action,
         loading: false,
         check_box: check_box,
-        nav: res.nav?res.nav:null
+        nav: res.nav?res.nav:null,
+        columns: res.columns?res.columns:[],
+        body: res.body?res.body:[]
       })
     }).catch((error) => {
       console.log(error)
@@ -302,7 +306,7 @@ export default class Product extends Component {
           {
             this.state.columns.length==0?null:(
               <div className="TableReact" >
-                <Table hide_columns={this.state.hide_columns} columns={this.state.columns} flag={false} table={this.state.table} recursion={this.state.recursion} data={this.state.body} foot={this.state.foot} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }}/>
+                <Table hide_columns={this.state.hide_columns} columns={this.state.columns} flag={false} table={this.state.table} recursion={this.state.recursion} data={this.state.body} foot={this.state.foot} style={{width: "90%", margin: "0 auto"}} pagination={false} scroll={{ y: 440 }} orderBy={this.state.order_by}/>
               </div>
             )
           }

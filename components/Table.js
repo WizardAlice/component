@@ -42,7 +42,8 @@ export default class Table extends Component{
       columns: this.props.columns,
       foot: this.props.foot,
       hide_columns: this.props.hide_columns,
-      flag: this.props.flag
+      flag: this.props.flag,
+      orderBy: this.props.orderBy
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -67,7 +68,8 @@ export default class Table extends Component{
         columns: nextProps.columns,
         foot: nextProps.foot,
         hide_columns: nextProps.hide_columns,
-        flag: nextProps.flag
+        flag: nextProps.flag,
+        orderBy: nextProps.orderBy
       })
     }
   }
@@ -90,7 +92,8 @@ export default class Table extends Component{
         columnDefs: [{
           targets: this.state.hide_columns,
           visible: false
-        }]
+        }],
+        order: this.state.orderBy ?  [this.state.orderBy] : [[0, 'asc']]
       })
     }
   }
@@ -100,7 +103,8 @@ export default class Table extends Component{
         columnDefs: [{
           targets: this.state.hide_columns,
           visible: false
-        }]
+        }],
+        order: this.state.orderBy ?  [this.state.orderBy] : [[0, 'asc']]
       })
     } 
   }
