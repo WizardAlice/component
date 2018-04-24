@@ -35,7 +35,14 @@ export default class Selects extends Component {
   onSearch = (v) => {  //因为终端属性已经满足需求了，所以只能写在不会造成影响的这里了。即所有具有伪搜索功能的下拉框，都需要以分组的形式，而相当于切换两个数组。而不需要的就不会绑定此函数，但是后期可能还需要避免多个select的关联带入到上面的select中
     if(v){
       let data = cloneObj(this.props.attributes)
-      data.data = data.data[data.data.length-1].pop()
+      let temp_data = []
+      data.data[data.data.length-1].pop().map((item)=>{
+        if(item.includes(v)){
+          temp_data.push(item) 
+        }
+      })
+
+      data.data = temp_data
       // for (let i = 0; i <= data.data.length-1; i++) {
       //   data.data.shift()
       // }

@@ -49,7 +49,8 @@ export default class Product extends Component {
       nav: null,
       error: false,
       sqlError: false,
-      order_by: null
+      order_by: null,
+      time_situation: false
     }
   }
 
@@ -115,7 +116,8 @@ export default class Product extends Component {
       report_date: this.state.report_date,
       tag: this.state.tag,
       action: this.state.action,
-      check_box: this.state.check_box
+      check_box: this.state.check_box,
+      time_situation: this.state.time_situation
     }
     this.setState({
       loading: true
@@ -185,6 +187,21 @@ export default class Product extends Component {
     this.setState({
       loading: true
     }) 
+
+    Event.on('change_time',()=>{
+      if(window.location.href.split("/index").shift().split("/").pop() == "overline_service_mobile_reports"){
+        if(localStorage.getItem("time_situation") == "true"){
+          window.location.href = "index?time_situation=true"
+        }else{
+          window.location.href = "index"
+        }
+        
+      }else{
+        this.setState({
+          time_situation: !this.state.time_situation
+        },()=> this.getChart())
+      }
+    })
 
     getForm().then((res) => {
       let a = {}
