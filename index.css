@@ -79,7 +79,7 @@ html, body, #root {
 .EchartsReact{
   margin-top: 2%;
 }
-.checkbox {
+.checkboxs {
   display: inline-flex;
   justify-content: space-around;
   width: 100%;
@@ -105,4 +105,12 @@ table.vertical div {
 } 
 .overx {
   overflow: auto;
+}
+
+.target-chart{
+  position: relative;
+  top: -100px;
+  display: block;
+  height: 0;
+  overflow: hidden;
 }

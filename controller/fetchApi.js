@@ -22,7 +22,8 @@ export function getForm(){
         action: data.form.action,
         nav: data.nav,
         body: data.body,
-        columns: data.columns
+        columns: data.columns,
+        exact: data.exact
       }
     })
 }
@@ -56,7 +57,8 @@ export function getChart({from_date = "", end_date = "", tag, action, report_dat
       hide_columns: data.hide_columns,
       nav: data.nav,
       ratio: data.ratio,
-      order_by: data.order_by
+      order_by: data.order_by,
+      multiple_chart: data.multiple_chart
     }
   })
 }

@@ -88,11 +88,16 @@ export function labelFormatterRatio(params){
   }
 }
 
-export function chartOption({ratio = false, legendDate, x, y, seriesData}){
+export function chartOption({ratio = false, legendDate, x, y, seriesData, title=null}){
   let tooltip = {
     trigger: 'axis',
-    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+    axisPointer:{
+        show: true,
+        type : 'cross',
+        lineStyle: {
+            type : 'dashed',
+            width : 1
+        }
     }
   }
   if(ratio === true){
@@ -189,6 +194,9 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData}){
       return Object.assign({}, v)
     }
   })
+  let realTitle = title?{
+    text: title
+  }:{}
   return {
     tooltip: tooltip,
     legend: legend,
@@ -196,7 +204,8 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData}){
     grid: grid,
     xAxis: xAxis,
     yAxis: yAxis,
-    series: series
+    series: series,
+    title: realTitle
   }
 }
 

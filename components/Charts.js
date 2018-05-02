@@ -22,7 +22,8 @@ export default class Allbook extends Component{
         legendDate: this.props.data[0].legend,
         x: this.props.data[1],
         y: this.props.data[2].yAxis,
-        seriesData: this.props.data[2].data
+        seriesData: this.props.data[2].data,
+        title: this.props.title
       })
     }
   }
@@ -34,7 +35,8 @@ export default class Allbook extends Component{
         legendDate: newxProps.data[0].legend,
         x: newxProps.data[1],
         y: newxProps.data[2].yAxis,
-        seriesData: newxProps.data[2].data
+        seriesData: newxProps.data[2].data,
+        title: newxProps.title
       })
     })
     // echarts_instance.clear()

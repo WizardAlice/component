@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 // import { connect } from 'dva';
-import { DatePicker, Button, Switch , Checkbox , Affix , Tabs } from 'antd'
+import { DatePicker, Button, Switch , Checkbox , Affix , Tabs , Timeline } from 'antd'
 import "antd/lib/button/style"
 import "antd/lib/date-picker/style"
 import "antd/lib/select/style"
@@ -19,7 +19,8 @@ import $ from 'jquery'
 import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
 
-const dateFormat = 'YYYY/MM/DD'
+const dateFormatOri = 'YYYY/MM/DD'
+const dateFormatExact = 'YYYY/MM/DD HH/mm'
 const monthFormat = 'YYYY/MM'
 const { MonthPicker } = DatePicker
 const RangePicker = DatePicker.RangePicker
@@ -50,7 +51,9 @@ export default class Product extends Component {
       error: false,
       sqlError: false,
       order_by: null,
-      time_situation: false
+      time_situation: false,
+      exact: false,
+      multiple_chart: false
     }
   }
 
@@ -167,7 +170,8 @@ export default class Product extends Component {
         hide_columns: res.hide_columns?res.hide_columns:null,
         sqlError: false,
         ratio: res.ratio?res.ratio:false,
-        order_by: res.order_by? res.order_by:null
+        order_by: res.order_by? res.order_by:null,
+        multiple_chart: res.multiple_chart?res.multiple_chart:false
       })
     }).catch((error) => {
       console.log('Request failed', error)
@@ -227,7 +231,8 @@ export default class Product extends Component {
         check_box: check_box,
         nav: res.nav?res.nav:null,
         columns: res.columns?res.columns:[],
-        body: res.body?res.body:[]
+        body: res.body?res.body:[],
+        exact: res.exact?res.exact:false
       })
     }).catch((error) => {
       console.log(error)
@@ -254,6 +259,17 @@ export default class Product extends Component {
     },()=> this.getChart())
   }
 
+  renderMultipleChart = (charts) => {
+    return (
+      <div>
+        <Timeline style={{position: "fixed", left: "1%"}}>
+          {charts[0].legend.map((x) => <Timeline.Item><a href={"#"+x}>{x}</a></Timeline.Item>)}
+        </Timeline>
+        {charts[2].data.map((xx,index) => <div style={{marginLeft: "3%"}}><a id={charts[0].legend[index]} className="target-chart"></a><Charts title={charts[0].legend[index]} data={[{title: charts[0].title, legend: []},charts[1],{data: xx, yAxis: charts[2].yAxis}]} ratio={this.state.ratio} /></div> )}
+      </div>
+    )
+  }
+
   render() {
     return (
         <div className="content">
@@ -265,19 +281,19 @@ export default class Product extends Component {
           ):null}
           {
             this.state.forms.length==0?null:(
-              <Affix offsetTop={51}>
                 <div className="formContent">
                   <div className="form">
                     {
                       this.state.forms.map((v, index) => {
+                        let dateFormat = this.state.exact ? dateFormatExact : dateFormatOri
                         if(v.attributes.input_type == "datetime"){
                           return  <div className="rangePicker"  key={index+this.state.target+"rangePicker"}>
                                     <span className="formsLabel">{v.attributes.label_text}:</span>
-                                    <RangePicker style={{'width': "70%"}} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近三日": [moment().subtract(2, 'days'), moment()], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
+                                    <RangePicker style={{'width': "70%"}} format={this.state.exact?"YYYY-MM-DD HH:mm":"YYYY-MM-DD"} value={[moment(this.state.from_date, dateFormat), moment(this.state.end_date, dateFormat)]} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近三日": [moment().subtract(2, 'days'), moment()], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
                                   </div>
                         }
                         else if(v.attributes.input_type == "checkbox"){
-                          return  <div className="checkbox"  key={index+this.state.target+"checkbox"}>
+                          return  <div className="checkboxs"  key={index+this.state.target+"checkbox"}>
                                     <CheckboxGroup options={v.attributes.data} defaultValue={v.attributes.default} value={this.state.check_box} onChange={this.getCheckBox}/>
                                   </div>
                         }
@@ -299,7 +315,6 @@ export default class Product extends Component {
                     </Button>
                   </div>
                 </div>
-              </Affix>
             )
           }
           {
@@ -315,8 +330,8 @@ export default class Product extends Component {
           {
             this.state.charts.length==0?null:(
               <div className="EchartsReact">
-                <div className="radioSwitch"><span>占比：</span><Switch checked={this.state.ratio} defaultChecked={this.state.ratio} onChange={this.onChange} /></div>
-                <Charts data={this.state.ratio?this.state.ratio_chart:this.state.charts} ratio={this.state.ratio} />
+                {this.state.ratio_chart.length == 0 ? null : (<div className="radioSwitch"><span>占比：</span><Switch defaultChecked={this.state.ratio} checked={this.state.ratio} onChange={this.onChange} /></div>)}
+                { this.state.multiple_chart? this.renderMultipleChart(this.state.charts) : <Charts data={this.state.ratio?this.state.ratio_chart:this.state.charts} ratio={this.state.ratio} /> }
               </div>
             )
           }
