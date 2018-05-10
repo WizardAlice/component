@@ -109,7 +109,7 @@ table.vertical div {
 
 .target-chart{
   position: relative;
-  top: -100px;
+  top: -50px;
   display: block;
   height: 0;
   overflow: hidden;

@@ -45,9 +45,10 @@ const list = {
 
 export function getUrl(str){
   // let url = str.split("?").shift().split("/")
-  let fullurl = str.split("/index")
+  let fullurl = str.split("?")
   let url = fullurl.shift().split("/")
-  let time_situation = fullurl.pop()
+  let time_situation = fullurl.pop().split('&').pop()
+  time_situation = time_situation ? `?${time_situation}` : ""
   let b = url.pop()   //得到后面的地址
   let a = url.pop()    //得到seed,charge之类的地址
   for(let i in list){

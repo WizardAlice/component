@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 // import { connect } from 'dva';
-import { DatePicker, Button, Switch , Checkbox , Tabs , Timeline } from 'antd'
+import { DatePicker, Button, Switch , Checkbox , Affix , Tabs , Timeline } from 'antd'
 import "antd/lib/button/style"
 import "antd/lib/date-picker/style"
 import "antd/lib/select/style"
 import "antd/lib/switch/style"
 import "antd/lib/spin/style"
 import "antd/lib/modal/style"
+import "antd/lib/affix/style"
 import { getForm, getChart } from "./controller/fetchApi"
 import { removeByValue , cloneObj } from "./controller/method"
 import Selects  from './components/Select'
 import Charts from './components/Charts'
 import Table from './components/Table'
-import { getUrl } from './controller/getUrl'
+import $ from 'jquery'
 
 import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
@@ -28,7 +29,7 @@ const TabPane = Tabs.TabPane
 
 let url_head = "https://mantis.appleflying.com:7555/"
 
-export default class Product extends Component {
+export default class Some extends Component {
   constructor(props, context){
     super(props, context)
     this.state = {
@@ -189,8 +190,28 @@ export default class Product extends Component {
   //   return this.props.data!==nextProps.data
   // }
 
-  getForm = (str=null) => {
-    getForm(str).then((res) => {
+
+  componentDidMount() {
+    this.setState({
+      loading: true
+    }) 
+
+    Event.on('change_time',()=>{
+      if(window.location.href.split("/index").shift().split("/").pop() == "overline_service_mobile_reports"){
+        if(localStorage.getItem("time_situation") == "true"){
+          window.location.href = "index?time_situation=true"
+        }else{
+          window.location.href = "index"
+        }
+        
+      }else{
+        this.setState({
+          time_situation: !this.state.time_situation
+        },()=> this.getChart())
+      }
+    })
+
+    getForm().then((res) => {
       let a = {}
       let check_box = []
       if(res.forms){
@@ -223,81 +244,6 @@ export default class Product extends Component {
         error: true
       })
     })
-  }
-
-
-  componentDidMount() {
-    this.setState({
-      loading: true
-    }) 
-
-    Event.on('change_time',()=>{
-      if(window.location.href.split("?").shift().split("/").pop() == "overline_service_mobile_reports"){
-        if(localStorage.getItem("time_situation") == "true"){
-          window.location.href = `${window.location.href}&time_situation=true`
-          this.getForm()
-        }else{
-          window.location.href = window.location.href.split('&').shift()
-          this.getForm()
-        }
-        
-      }else{
-        this.setState({
-          time_situation: !this.state.time_situation
-        },()=> this.getChart())
-      }
-    })
-
-    Event.on('change_menu',(result) => {
-      console.log(result)
-      let url_result = result.split('|')[0]
-      $('.box-title').html(result.split('|')[1])
-      this.getForm(url_result.split("i#").pop())
-      this.setState({
-        target: url_result,
-        charts: [],
-        time_situation: false,
-        extra_downloads:[],
-        foot: []
-      })
-      // getForm().then((res) => {
-      //   let a = {}
-      //   let check_box = []
-      //   if(res.forms){
-      //     res.forms.map((v)=>{
-      //       if(v.attributes.input_type=="select"){
-      //         a[v.name] = v.attributes.default
-      //       }
-      //       if(v.attributes.input_type=="checkbox"){
-      //         check_box = v.attributes.default
-      //       }
-      //     })
-      //   }
-      //   this.setState({
-      //     forms: res.forms?res.forms:[],
-      //     from_date: res.forms?res.forms[0].attributes.from_date:"",
-      //     end_date: res.forms?res.forms[0].attributes.end_date:"",
-      //     report_date: res.forms?(res.forms[0].attributes.defaultValue?res.forms[0].attributes.defaultValue.slice(0,7):null):null,
-      //     tag: a,
-      //     action: res.action,
-      //     target: result,
-      //     columns: res.columns?res.columns:[],  //用以切换界面的时候，下面的表格和图标数据清空
-      //     body: res.body?res.body:[],
-      //     charts: [],
-      //     loading: false,
-      //     check_box: check_box,
-      //     nav: res.nav?res.nav:null,
-      //     time_situation: false,
-      //     exact: res.exact?res.exact:false
-      //   })
-      // })
-    })
-
-    // let url_temp = window.location.href.split('/').pop().split('?')[0]
-    // Event.emit('change_menu', $(this).attr('href'))
-
-    // let url_temp = window.location.href.aplit('/').pop().split('?')[0]
-    this.getForm()
   }
 
   onChange = (v) => {
@@ -347,7 +293,7 @@ export default class Product extends Component {
                         if(v.attributes.input_type == "datetime"){
                           return  <div className="rangePicker"  key={index+this.state.target+"rangePicker"}>
                                     <span className="formsLabel">{v.attributes.label_text}:</span>
-                                    <RangePicker style={{'width': "70%"}} format={this.state.exact?"YYYY-MM-DD HH:mm":"YYYY-MM-DD"} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近三日": [moment().subtract(2, 'days'), moment()], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
+                                    <RangePicker style={{'width': "70%"}} format={this.state.exact?"YYYY-MM-DD HH:mm":"YYYY-MM-DD"} value={[moment(this.state.from_date, dateFormat), moment(this.state.end_date, dateFormat)]} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近三日": [moment().subtract(2, 'days'), moment()], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
                                   </div>
                         }
                         else if(v.attributes.input_type == "checkbox"){

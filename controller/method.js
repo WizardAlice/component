@@ -195,7 +195,11 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
     }
   })
   let realTitle = title?{
-    text: title
+    text: title.title? title.title: "",
+    subtext: title.subtext? title.subtext:"",
+    subtextStyle :{
+      color: "red"
+    }
   }:{}
   return {
     tooltip: tooltip,

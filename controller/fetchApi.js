@@ -5,8 +5,8 @@ import 'whatwg-fetch' //此处全部引入，可以拆分
 let url_head = "https://mantis.appleflying.com:7555/"
 // let url_head = ""
 
-export function getForm(){
-  let str = getUrl(window.location.href) ? getUrl(window.location.href) : "/ework/arrival_operate_reports/form_part.json"
+export function getForm(url_string=null){
+  let str = url_string ? (url_string+"/form_part.json") : (getUrl(window.location.href) ? getUrl(window.location.href) : "/ework/arrival_operate_reports/form_part.json")
   return fetch(url_head+str,{
     credentials : "include",
     mode: "cors",
@@ -58,7 +58,8 @@ export function getChart({from_date = "", end_date = "", tag, action, report_dat
       nav: data.nav,
       ratio: data.ratio,
       order_by: data.order_by,
-      multiple_chart: data.multiple_chart
+      multiple_chart: data.multiple_chart,
+      extra_downloads: data.extra_downloads
     }
   })
 }

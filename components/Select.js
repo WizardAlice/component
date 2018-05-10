@@ -37,7 +37,7 @@ export default class Selects extends Component {
       let data = cloneObj(this.props.attributes)
       let temp_data = []
       data.data[data.data.length-1].pop().map((item)=>{
-        if(item.includes(v)){
+        if(item.toString().toLowerCase().includes(v.toLowerCase())){
           temp_data.push(item) 
         }
       })
