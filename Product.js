@@ -13,7 +13,6 @@ import { removeByValue , cloneObj } from "./controller/method"
 import Selects  from './components/Select'
 import Charts from './components/Charts'
 import Table from './components/Table'
-import { getUrl } from './controller/getUrl'
 
 import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
