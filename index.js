@@ -31,6 +31,7 @@ ReactDOM.render(( //开发测试用，模拟路由
     	<Route path="/seed/solution_conversion_reports" component={Product}/>
     	<Route path="/seed/solution_conversion_reports" component={Product}/>
     	<Route path="/seed/overline_service_reports" component={Product}/>
+      <Route path="/seed/delivery_lost_ratio_reports" component={Product}/>
 
     	<Route path="/dm/activity_reports" component={Product}/>
       <Route path="/dm/alive_reports" component={Product}/>

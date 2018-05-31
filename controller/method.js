@@ -98,6 +98,21 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
             type : 'dashed',
             width : 1
         }
+    },
+    formatter: (params) => {
+      let str = params[0].name.toString()
+      params.map((v) => {
+        if(v.value !== 0){
+          str += "<br>"
+          str += '<span style="display:inline-block;margin-left:5px;margin-right:5px;';
+          str += 'border-radius:10px;width:9px;height:9px;';
+          str += 'background-color:'+ v.color +'"></span>';
+          str += v.seriesName.toString()
+          str += " : "
+          str += v.value
+        }
+      })
+      return str
     }
   }
   if(ratio === true){
@@ -173,7 +188,7 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
         return Object.assign({}, v, {
           label: {
             normal: {
-              show: true,
+              show: legendDate.length > 20 ? false : true,
               position: 'inside',
               formatter: labelFormatterRatio
             }
@@ -183,7 +198,7 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
         return Object.assign({}, v, {
           label: {
             normal: {
-              show: true,
+              show: legendDate.length > 20 ? false : true,
               position: 'inside',
               formatter: labelFormatter
             }
@@ -202,6 +217,7 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
     }
   }:{}
   return {
+    color: ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
     tooltip: tooltip,
     legend: legend,
     toolbox: toolbox,

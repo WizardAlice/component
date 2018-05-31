@@ -15,7 +15,8 @@ const list = {
     "solution_ratio_reports": ["/seed/solution_ratio_reports/form_part.json", "方案成功占比"],
     "solutions_ratio_reports": ["/seed/solutions_ratio_reports/form_part.json", "方案事件占比"],
     "overline_service_reports": ["/seed/overline_service_reports/form_part.json", "种子跨业务线"],
-    "solution_conversion_reports": ["/seed/solution_conversion_reports/form_part.json", "方案事件转化率"]
+    "solution_conversion_reports": ["/seed/solution_conversion_reports/form_part.json", "方案事件转化率"],
+    "delivery_lost_ratio_reports": ["/seed/delivery_lost_ratio_reports/form_part.json", "下发流失率报表"]
   },
   "dm": {
     "activity_reports": ["/dm/activity_reports/form_part.json", "DM活跃"],
