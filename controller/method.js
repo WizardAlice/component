@@ -99,21 +99,22 @@ export function chartOption({ratio = false, legendDate, x, y, seriesData, title=
             width : 1
         }
     },
-    formatter: (params) => {
-      let str = params[0].name.toString()
-      params.map((v) => {
-        if(v.value !== 0){
-          str += "<br>"
-          str += '<span style="display:inline-block;margin-left:5px;margin-right:5px;';
-          str += 'border-radius:10px;width:9px;height:9px;';
-          str += 'background-color:'+ v.color +'"></span>';
-          str += v.seriesName.toString()
-          str += " : "
-          str += v.value
-        }
-      })
-      return str
-    }
+    trigger : legendDate.length > 20 ? 'item' : 'axis',
+    // formatter: (params) => {
+    //   let str = params[0].name.toString()
+    //   params.map((v) => {
+    //     if(v.value !== 0){
+    //       str += "<br>"
+    //       str += '<span style="display:inline-block;margin-left:5px;margin-right:5px;';
+    //       str += 'border-radius:10px;width:9px;height:9px;';
+    //       str += 'background-color:'+ v.color +'"></span>';
+    //       str += v.seriesName.toString()
+    //       str += " : "
+    //       str += v.value
+    //     }
+    //   })
+    //   return str
+    // }
   }
   if(ratio === true){
     tooltip = Object.assign(tooltip, {
@@ -243,6 +244,70 @@ export function handleBarMark(params){
   }else{
     return ""
   }
+}
+
+Array.prototype.to_string = function(){
+  for(let i = 0; i < this.length; i++){
+    this[i] = this[i].toString()
+  }
+  return this
+}
+
+export function handlePieOptions(datas, name){
+  let series = []
+  debugger
+  datas[2].data.map((i) => {
+    if(i.data[datas[1].data.to_string().indexOf(name)] !== 0){
+      series.push({name: i.name, value: i.data[datas[1].data.indexOf(name)]})
+    }
+  })
+  let temp_option = {
+    title : {
+        text: `方案${name}下的数据`,
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data: datas[0].legend
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'占比',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data: series
+        }
+    ]
+  }
+  return temp_option                 
 }
 
 

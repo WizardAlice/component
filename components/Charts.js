@@ -1,19 +1,20 @@
 import React,{Component} from 'react'
 import ReactEcharts from 'echarts-for-react'
-import echarts from 'echarts'
+// import echarts from 'echarts'
 import { chartOption } from '../controller/method'
+import PropTypes from 'prop-types'
 
-echarts.registerTheme('my_theme', {
-  legend: {
-    padding: 50
-  },
-  dataRange: {
-    padding: 200
-  }
-})
+// echarts.registerTheme('my_theme', {
+//   legend: {
+//     padding: 50
+//   },
+//   dataRange: {
+//     padding: 200
+//   }
+// })
 
 
-export default class Allbook extends Component{
+class Allbook extends Component{
   constructor(props, context){
     super(props, context)
     this.state = {
@@ -24,9 +25,18 @@ export default class Allbook extends Component{
         y: this.props.data[2].yAxis,
         seriesData: this.props.data[2].data,
         title: this.props.title
-      })
+      }),
+      visible: false
     }
   }
+
+  handleClick = (param) => {
+    debugger
+    this.setState({
+      visible: true
+    })
+  }
+
   componentWillReceiveProps(newxProps) {
     // let echarts_instance = this.echarts_react.getEchartsInstance()
     this.setState({
@@ -45,10 +55,18 @@ export default class Allbook extends Component{
     return this.props.data!==nextProps.data
   }
   render(){
-    console.log(this.state.option)
-    return <ReactEcharts theme='my_theme' notMerge={true}  option={this.state.option} style={{height: document.documentElement.clientHeight-50, width: '100%'}} className='react_for_echarts' />
+    return (
+      <div>
+        <ReactEcharts theme='my_theme' onEvents={{click: this.props.onClick}} notMerge={true}  option={this.state.option} style={{height: document.documentElement.clientHeight-50, width: '100%'}} className='react_for_echarts' />
+      </div>)
   }
 }
+
+Allbook.propTypes = {
+  onClick: PropTypes.func.isRequired
+}
+
+export default Allbook
 
 
 

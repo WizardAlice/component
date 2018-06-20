@@ -11,8 +11,9 @@ import "antd/lib/modal/style"
 import { getForm, getChart } from "./controller/fetchApi"
 import { removeByValue , cloneObj } from "./controller/method"
 import Selects  from './components/Select'
-import Charts from './components/Charts'
+import Charts from './containers/Charts'
 import Table from './components/Table'
+import ChartMoadls from './containers/ChartMoadl'
 
 import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
@@ -54,7 +55,8 @@ export default class Product extends Component {
       time_situation: false,
       exact: false,
       multiple_chart: false,
-      extra_downloads:[]
+      extra_downloads:[],
+      text: null
     }
   }
 
@@ -121,7 +123,8 @@ export default class Product extends Component {
       tag: this.state.tag,
       action: this.state.action,
       check_box: this.state.check_box,
-      time_situation: this.state.time_situation
+      time_situation: this.state.time_situation,
+      text: this.state.text
     }
     this.setState({
       loading: true
@@ -182,6 +185,22 @@ export default class Product extends Component {
         sqlError: true
       })
     })
+  }
+
+  changeText = (e) =>{
+    if(e.target.value){
+      this.setState({
+        text: e.target.value
+      })
+    }
+  }
+
+  changeDatepicker = (value, dateString) =>{
+    if(dateString){
+      this.setState({
+        from_date: dateString
+      })
+    }
   }
 
   // shouldComponentUpdate(nextProps, nextState){
@@ -349,6 +368,12 @@ export default class Product extends Component {
                                     <RangePicker style={{'width': "70%"}} format={this.state.exact?"YYYY-MM-DD HH:mm":"YYYY-MM-DD"} defaultValue={[moment(v.attributes.from_date, dateFormat), moment(v.attributes.end_date, dateFormat)]} ranges={{ "今日": [moment(), moment()], "昨日": [moment().subtract(1, 'days'), moment().subtract(1, 'days')], "近三日": [moment().subtract(2, 'days'), moment()], "近7日": [moment().subtract(6, 'days'),moment()], "近30日": [moment().subtract(29, 'days'),moment()]}} onChange={this.getDate}/>
                                   </div>
                         }
+                        else if(v.attributes.input_type == "datepicker"){
+                          return  <div className="rangePicker"  key={index+this.state.target+"datepicker"}>
+                                    <span className="formsLabel">{v.attributes.label_text}:</span>
+                                    <DatePicker style={{'width': "50%"}} defaultValue={moment(v.attributes.default, dateFormatOri)} onChange={this.changeDatepicker}/>
+                                  </div>
+                        }
                         else if(v.attributes.input_type == "checkbox"){
                           return  <div className="checkboxs"  key={index+this.state.target+"checkbox"}>
                                     <CheckboxGroup options={v.attributes.data} defaultValue={v.attributes.default} value={this.state.check_box} onChange={this.getCheckBox}/>
@@ -362,6 +387,12 @@ export default class Product extends Component {
                         }
                         else if(v.attributes.input_type == "select"){
                           return <Selects attributes={v.attributes} tagValue={this.state.tag[v.name]} tagchange={this.getTag} name={v.name} labelName={v.attributes.label_text} key={Math.random().toString(36).substr(2)}/>
+                        }
+                        else if(v.attributes.input_type == "text"){
+                          return <div key={index+this.state.target+"text"}>
+                            <span className="formsLabel">{v.attributes.label_text}:</span>
+                            <input style={{'width': "70%"}} defaultValue={v.attributes.default} onChange={this.changeText}/>
+                          </div>
                         }
                       })
                     }
@@ -396,6 +427,7 @@ export default class Product extends Component {
               <div className="EchartsReact">
                 {this.state.ratio_chart.length == 0 ? null : (<div className="radioSwitch"><span>占比：</span><Switch defaultChecked={this.state.ratio} checked={this.state.ratio} onChange={this.onChange} /></div>)}
                 { this.state.multiple_chart? this.renderMultipleChart(this.state.charts) : <Charts title={this.state.charts[0].title} data={this.state.ratio?this.state.ratio_chart:this.state.charts} ratio={this.state.ratio} /> }
+                <ChartMoadls/>
               </div>
             )
           }

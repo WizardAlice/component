@@ -29,12 +29,13 @@ export function getForm(url_string=null){
 }
 
 //我这默认黑箱的情况下可怎么改名啊！！！
-export function getChart({from_date = "", end_date = "", tag, action, report_date = "", check_box = [], time_situation = false}){
+export function getChart({from_date = "", end_date = "", tag, action, report_date = "", check_box = [], time_situation = false, text = null}){
   let select = encodeURI(objectToString(tag)) 
   report_date = oneDate(report_date)
   check_box = (check_box.length == 0 ? "" : ("&report[check_box]="+check_box))
   let time_situation_str = time_situation ? "&report[time_situation]=true" : ""
-  let str = url_head+action+".json?"+"report[from_date]="+from_date+"&report[end_date]="+end_date+report_date+select+check_box+time_situation_str
+  let text_str = text ?  `&report[text]=${text}` : ""
+  let str = url_head+action+".json?"+"report[from_date]="+from_date+"&report[end_date]="+end_date+text_str+report_date+select+check_box+time_situation_str
   return fetch(str,{
   // return fetch("http://localhost:8888/suibian",{
     credentials : "include",
